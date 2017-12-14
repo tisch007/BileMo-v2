@@ -69,6 +69,40 @@ class UserController extends Controller
         return $users;
     }
 
+    /**
+     *@Rest\Get(
+     *     path = "/api/clients/{id}",
+     *     name = "app_client_show",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @ApiDoc(
+     *     description="Get one user.",
+     *     section="User",
+     *     resource=true,
+     *     requirements={
+     *          {
+     *              "name"="id",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="The user unique identifier"
+     *          }
+     *     },
+     *     output={
+     *         "class"="AppBundle\Entity\User",
+     *         "parsers"={"Nelmio\ApiDocBundle\Parser\JmsMetadataParser"}
+     *     },
+     * )
+     * @Rest\View
+     */
+    public function showAction($id){
+        $user = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->find($id);
+
+        if(empty($user)){
+            return View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $user;
+    }
 
     /**
      * @Rest\Post(
