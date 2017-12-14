@@ -69,7 +69,6 @@ class UserController extends Controller
         return $users;
     }
 
-    
 
     /**
      * @Rest\Post(
