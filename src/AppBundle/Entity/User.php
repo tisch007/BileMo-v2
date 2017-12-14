@@ -19,7 +19,6 @@ use JMS\Serializer\Annotation as Serializer;
  *          absolute = true
  *      )
  * )
-
  * @Hateoas\Relation(
  *     "self",
  *     href = @Hateoas\Route(
@@ -28,7 +27,6 @@ use JMS\Serializer\Annotation as Serializer;
  *          absolute = true
  *     )
  * )
-
  */
 class User extends BaseUser
 {
