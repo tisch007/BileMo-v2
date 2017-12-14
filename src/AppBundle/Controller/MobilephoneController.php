@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -13,12 +12,10 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class MobilephoneController extends FOSRestController
 {
     /**
      * @Rest\Get(
-
      *     path = "/api/mobilephones",
      *     name = "app_mobilephones_list"
      * )
@@ -34,13 +31,10 @@ class MobilephoneController extends FOSRestController
      *     default="1",
      *     description="The pagination offset"
      * )
-
-
      * @Rest\View
      * @Doc\ApiDoc(
      *     section="Mobilephone",
      *     resource=true,
-
      *     description="Get the list of all articles.",
      *     output={
      *         "class"="AppBundle\Entity\Mobilephone",
@@ -73,39 +67,5 @@ class MobilephoneController extends FOSRestController
             Response::HTTP_OK,
             ['Content-Type' => 'application/json',]
         );
-    }
-
-    /**
-     * @Rest\Get(
-     *     path = "/api/mobilephones/{id}",
-     *     name = "app_mobilephone_show",
-     *     requirements = {"id"="\d+"}
-     * )
-     * @Rest\View
-     * @Doc\ApiDoc(
-     *     section="Mobilephone",
-     *     resource=true,
-     *     description="Get one article.",
-     *     requirements={
-     *     {
-     *              "name"="id",
-     *              "dataType"="integer",
-     *              "requirement"="\d+",
-     *              "description"="The mobilephone unique identifier"
-     *          }
-     *     },
-     *     output={
-     *         "class"="AppBundle\Entity\Mobilephone",
-     *         "parsers"={"Nelmio\ApiDocBundle\Parser\JmsMetadataParser"}
-     *     },
-     * )
-     */
-    public function showAction($id)
-    {
-        $mobilephone = $this->getDoctrine()->getManager()->getRepository('AppBundle:Mobilephone')->find($id);
-        if (empty($mobilephone)) {
-            return View::create(['message' => 'Mobilephone not found'], Response::HTTP_NOT_FOUND);
-        }
-        return $mobilephone;
     }
 }
