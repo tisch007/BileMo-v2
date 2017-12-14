@@ -12,6 +12,13 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table(name="users")
  * @Serializer\ExclusionPolicy("all")
  *
+ * @Hateoas\Relation(
+ *      "client_list",
+ *      href = @Hateoas\Route(
+ *          "app_client_list",
+ *          absolute = true
+ *      )
+ * )
  */
 class User extends BaseUser
 {

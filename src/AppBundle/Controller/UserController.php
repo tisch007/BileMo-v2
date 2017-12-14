@@ -15,6 +15,62 @@ use JMS\Serializer\SerializationContext;
 class UserController extends Controller
 {
     /**
+     *@Rest\Get(
+     *     path = "/api/clients",
+     *     name = "app_client_list"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="20",
+     *     description="Max number of movies per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default="1",
+     *     description="The pagination offset"
+     * )
+     * @ApiDoc(
+     *     description="Get the list of all users.",
+     *     section="User",
+     *     resource=true,
+     *     output={
+     *         "class"="AppBundle\Entity\User",
+     *         "parsers"={"Nelmio\ApiDocBundle\Parser\JmsMetadataParser"}
+     *     },
+     * )
+     * @Rest\View
+     */
+    public function showListAction(ParamFetcherInterface $paramFetcher, Request $request)
+    {
+        $limit = $paramFetcher->get('limit');
+        $page = $paramFetcher->get('page');
+
+        $users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findAll();
+
+        $pager = $this->get('knp_paginator');
+        $pagination = $pager->paginate($users,$request->query->getInt('page',$page), $request->query->getInt('limit', $limit));
+
+        $serializer = $this->get('jms_serializer');
+        $result = array(
+            'data' => $pagination->getItems(),
+            'meta' => $pagination->getPaginationData());
+
+        return new Response(
+            $serializer->serialize(
+                $result,
+                'json',
+                SerializationContext::create()->setGroups(['Default'])
+            ),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json',]
+        );
+        return $users;
+    }
+
+
+    /**
      * @Rest\Post(
      *    path = "/api/clients",
      *    name = "app_client_post"

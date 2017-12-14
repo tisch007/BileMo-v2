@@ -68,4 +68,39 @@ class MobilephoneController extends FOSRestController
             ['Content-Type' => 'application/json',]
         );
     }
+
+    /**
+     * @Rest\Get(
+     *     path = "/api/mobilephones/{id}",
+     *     name = "app_mobilephone_show",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @Rest\View
+     * @Doc\ApiDoc(
+     *     section="Mobilephone",
+     *     resource=true,
+     *     description="Get one article.",
+     *     requirements={
+     *     {
+     *              "name"="id",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="The mobilephone unique identifier"
+     *          }
+     *     },
+     *     output={
+     *         "class"="AppBundle\Entity\Mobilephone",
+     *         "parsers"={"Nelmio\ApiDocBundle\Parser\JmsMetadataParser"}
+     *     },
+     * )
+     */
+    public function showAction($id)
+    {
+        $mobilephone = $this->getDoctrine()->getManager()->getRepository('AppBundle:Mobilephone')->find($id);
+        if (empty($mobilephone)) {
+            return View::create(['message' => 'Mobilephone not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $mobilephone;
+    }
 }
