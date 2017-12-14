@@ -103,29 +103,4 @@ class MobilephoneController extends FOSRestController
 
         return $mobilephone;
     }
-
-    /**
-     * @Rest\Post(
-     *    path = "/mobilephones",
-     *    name = "app_mobilephone_post"
-     * )
-     * @Rest\View(StatusCode=201)
-     * @ParamConverter("mobilephone", converter="fos_rest.request_body")
-     */
-
-    /*
-    public function createAction(Mobilephone $mobilephone, ConstraintViolationList $violations)
-    {
-        if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
-        }
-
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($mobilephone);
-        $em->flush();
-
-        return $mobilephone;
-    }
-    */
 }
