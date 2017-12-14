@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -12,10 +13,12 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class MobilephoneController extends FOSRestController
 {
     /**
      * @Rest\Get(
+
      *     path = "/api/mobilephones",
      *     name = "app_mobilephones_list"
      * )
@@ -31,10 +34,13 @@ class MobilephoneController extends FOSRestController
      *     default="1",
      *     description="The pagination offset"
      * )
+
+
      * @Rest\View
      * @Doc\ApiDoc(
      *     section="Mobilephone",
      *     resource=true,
+
      *     description="Get the list of all articles.",
      *     output={
      *         "class"="AppBundle\Entity\Mobilephone",
@@ -100,32 +106,6 @@ class MobilephoneController extends FOSRestController
         if (empty($mobilephone)) {
             return View::create(['message' => 'Mobilephone not found'], Response::HTTP_NOT_FOUND);
         }
-
         return $mobilephone;
     }
-
-    /**
-     * @Rest\Post(
-     *    path = "/mobilephones",
-     *    name = "app_mobilephone_post"
-     * )
-     * @Rest\View(StatusCode=201)
-     * @ParamConverter("mobilephone", converter="fos_rest.request_body")
-     */
-
-    /*
-    public function createAction(Mobilephone $mobilephone, ConstraintViolationList $violations)
-    {
-        if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
-        }
-
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($mobilephone);
-        $em->flush();
-
-        return $mobilephone;
-    }
-    */
 }
