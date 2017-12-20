@@ -1,72 +1,83 @@
-Symfony Standard Edition
-========================
+Bilemo
+==========
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
+Seventh project of my php developper training on Openclassrooms.
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
+# Installation
+## 1. Récupérer le code
 
-What's inside?
---------------
+1. Via Git en clonant ce dépôt.
 
-The Symfony Standard Edition is configured with the following defaults:
+## 2. Télécharger les vendors et définir les paramètres d'application
+Avec Composer bien évidemment :
 
-  * An AppBundle you can use to start coding;
+    composer install
 
-  * Twig as the only configured template engine;
+On vous demande à la fin de l'installation de définir les paramètres de l'application (database et mailer), complétez les informations demandées et validez.
 
-  * Doctrine ORM/DBAL;
+*Attention, n'oubliez pas de remplir les paramètres du mailer afin de recevoir les identifiants OAuth par mail ainsi que la version du serveur mysql que vous utilisez.*
+## 3. Créez la base de données
+Si la base de données que vous avez renseignée dans l'étape 2 n'existe pas déjà, créez-la :
 
-  * Swiftmailer;
+    php bin/console doctrine:database:create
 
-  * Annotations enabled for everything.
+Puis créez les tables correspondantes au schéma Doctrine :
 
-It comes pre-configured with the following bundles:
+    php bin/console doctrine:schema:update --force
 
-  * **FrameworkBundle** - The core Symfony framework bundle
+Enfin, ajoutez les fixtures :
 
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
+    php bin/console doctrine:fixtures:load
 
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
+## 4. Créez un user et lancez la commande de création d'un client OAuth
+Il va falloir créer un user , pour cela, lancez la commande suivante :
 
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
+    php bin/console fos:user:create
 
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
+Saisissez un username, un email et un mot de passe.
 
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
+Il faut ensuite lancer la commande qui permet de créer un client pour l'API. Pour cela, lancez la commande suivante :
 
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
+    php bin/console oauth-server:client-create <VOTRE-ADRESSE-EMAIL>
 
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
+Vous recevrez alors sur l'adresse email indiquée en paramètre de la commande votre client id et votre client secret.
 
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
+## 5. Obtenez un access token pour l'API
+Avec Postman.
 
-  * [**SensioGeneratorBundle**][13] (in dev env) - Adds code generation
-    capabilities
+Faites une requête de type `POST /oauth/v2/token` avec les paramètres suivant dans l'onglet 'Body' (en json) :
 
-  * [**WebServerBundle**][14] (in dev env) - Adds commands for running applications
-    using the PHP built-in web server
+    {
+      "grant_type": "password",
+      "client_id": "VotreClientId",
+      "client_secret": "VotreCLientSecret",
+      "username": "VotreUsername",
+      "password": "VotrePassword"
+    }
 
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
+N'oubliez pas de sélectionnez le format 'raw' et indiquer que l'on envoie du JSON (application/json).
 
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
+Vous recevrez en retour un access token ainsi qu'un refresh token qu'il faudra conserver dans un fichier txt par exemple.
 
-Enjoy!
+## 6. Connectez vous à l'API avec votre access token
+Avec Postman.
 
-[1]:  https://symfony.com/doc/3.4/setup.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/3.4/doctrine.html
-[8]:  https://symfony.com/doc/3.4/templating.html
-[9]:  https://symfony.com/doc/3.4/security.html
-[10]: https://symfony.com/doc/3.4/email.html
-[11]: https://symfony.com/doc/3.4/logging.html
-[13]: https://symfony.com/doc/current/bundles/SensioGeneratorBundle/index.html
-[14]: https://symfony.com/doc/current/setup/built_in_web_server.html
+Faites une requête de type `GET /products` et ajoutez le header suivant :
+
+    Authorization : Bearer VotreAccessToken
+
+Vous voilà authentifier !
+
+## 7. Explorez l'API
+Vous pouvez maintenant utiliser l'API, pour cela il y a une documentation que vous trouverez à cette adresse `/doc`.
+
+Votre access token expire au bout d'une heure. Il faudra donc refaire une demande en faisant une requête à cette adresse `POST /oauth/v2/token` avec les paramètres suivants :
+
+    {
+        "grant_type": "refresh_token",
+        "client_id": "VotreClientId",
+        "client_secret": "VotreClientSecret",
+        "refresh_token": "VotreRefreshToken"
+    }
+
+## Et profitez !
