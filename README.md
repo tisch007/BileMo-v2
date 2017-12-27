@@ -38,9 +38,9 @@ Saisissez un username, un email et un mot de passe.
 
 Il faut ensuite lancer la commande qui permet de créer un client pour l'API. Pour cela, lancez la commande suivante :
 
-    php bin/console create-new-client <Your email>
+    php bin/console create-new-client
 
-Vous recevrez alors sur l'adresse email indiquée en paramètre de la commande votre client id et votre client secret.
+Vous trouverez dans votre terminal votre client id et votre client secret. Pensez à les noter dans un fichier texte.
 
 ## 5. Obtenez un access token pour l'API
 N'oubliez pas de lancer le serveur web avec la commande :
