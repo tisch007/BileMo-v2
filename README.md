@@ -1,4 +1,4 @@
-Bilemo
+BileMo
 ==========
 
 Seventh project of my php developer training on Openclassrooms.
