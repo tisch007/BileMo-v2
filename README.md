@@ -11,7 +11,7 @@ Seventh project of my php developer training on Openclassrooms.
 ## 2. Télécharger les vendors et définir les paramètres d'application
 Avec Composer bien évidemment :
 
-    composer install
+    composer update
 
 On vous demande à la fin de l'installation de définir les paramètres de l'application (database et mailer), complétez les informations demandées et validez.
 
